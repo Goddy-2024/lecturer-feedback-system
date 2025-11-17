@@ -1,0 +1,339 @@
+Lecturer Performance Review & Feedback System
+1. Problem Definition:
+Universities need a way to :~
+-Collect anonymous feedback about lecturers from students 
+-Evaluate lecturers performance using quantitive scores and qualitative comments(for simplicity we'll only use quantititive socres )
+-Generate reports that departments can use for improvements
+
+2. Key Users
+i. Lecturers:
+After each class a lecturer will login to the system with the LECTURER's role and generate a feedback form which will be sent the student emails or a link copied and shared manually
+Lecturers will be able to view their performance trends once they login to the system
+
+ii. Students:
+They receive the feedback form from via email or shared from a member as a link
+After filling the form, it is submitted and the response stored as data in the databse
+iii. Admin
+View all reports and analytics dashboard
+Export data to pdf or excel
+Manage courses lecturers and departments
+
+
+
+MVP: Lecturer Feedback Collection System
+
+A simple system where:
+Lecturers create feedback forms
+Students fill feedback
+Admin views reports
+
+Lecturers view their own performance trends
+
+1. MVP Features
+A. Lecturer Features
+
+Login as Lecturer
+Create a new Feedback Form for a course - Generates a shareable link OR sends link via email
+View feedback results (average score)
+View performance trend (previous forms + their average score)
+
+B. Student Features
+
+Receive feedback form link (via email or shared manually)
+Open the form (public link — no login required)
+Rate the lecturer (e.g., 1–5 scale for 3–5 metrics)
+Submit response → stored in database anonymously
+
+C. Admin Features
+
+Login as Admin
+Manage: Lecturers, Courses, Departments
+View all feedback data in a simple dashboard
+Export: PDF report, Excel report
+
+===============================================================
+System Functional Requirements
+==============================================================
+
+Here are the core functional requirements written clearly.
+
+A. Authentication Requirements
+System must allow:
+Admin login
+Lecturer login
+Students do not need to log in.
+
+B. Lecturer Functional Requirements
+Lecturer can create a new feedback form.
+System generates a unique link to the form.
+Lecturer can copy the link OR send it via email.
+Lecturer can view: - Total number of student responses, Average rating per metric, Overall average rating
+Lecturer can view performance trend as a simple line graph.
+
+C. Student Functional Requirements
+Student opens feedback form without login.
+Student sees: Course, Lecturer name, 1–5 rating scale for metrics (e.g., clarity, engagement, explanation, preparedness)
+Student submits response.
+System stores response anonymously.
+Students cannot edit submission after sending.
+
+D. Admin Functional Requirements
+
+Admin can add/edit/delete: Lecturers, Courses, Departments
+Admin can assign courses to lecturers.
+Admin can view all feedback submitted across the system.
+Admin can export data as: PDF (summary), Excel (raw data)
+Admin can generate system-wide analytics: Top lecturers, Average scores by department, Total responses per course.
+
+===============================================================
+Data Flow (How the system works)
+------------------------------------
+Step 1 — Lecturer logs in
+
+→ Creates a feedback form
+→ System generates a unique link, e.g.:
+
+https://feedback.app/form/72hg278bhdb
+
+Step 2 — Lecturer shares link
+
+Either via email OR WhatsApp group OR LMS
+
+Step 3 — Student fills form
+
+Opens link
+Rates lecturer (1–5)
+Clicks submit
+Data stored anonymously
+
+Step 4 — Lecturer views results
+
+Login again
+Dashboard shows:
+averages
+
+number of submissions
+
+trend graph
+
+Step 5 — Admin views everything
+
+Export reports
+
+Manage lecturers, courses, departments
+
+
+MVP Screens / Pages
+For Lecturers: Login page, Dashboard, “Create Feedback Form” page, “My Results” page, “Performance Trend” chart. 
+
+For Students: Feedback form page only.
+
+For Admin: Admin login page, Admin dashboard, Manage Departments, Manage Lecturers, Manage Courses, View All Feedback, Export Reports
+
+MVP API Endpoints
+Lecturer APIs: 
+
+POST /login
+POST /feedback/create
+GET /feedback/:lecturerId/results
+GET /feedback/:lecturerId/trends
+
+Student APIs:
+
+GET /form/:id
+POST /form/:id/submit
+
+Admin APIs
+
+POST /admin/login
+CRUD /admin/lecturers
+CRUD /admin/courses
+CRUD /admin/departments
+GET /admin/reports
+GET /admin/export/pdf
+GET /admin/export/excel
+
+TechStack: React + TailwindCSS + Axios + Recharts + pdfkit + json2csv/exceljs, Django(REST Framework)
+
+UI WIREFRAMES
+
+Lecturer Dashboard:
++----------------------------------------------------------+
+|  Lecturer Dashboard                                      |
++----------------------------------------------------------+
+|  [Create New Feedback Form]                              |
++----------------------------------------------------------+
+|  My Courses                                              |
+|  ------------------------------------------------------  |
+|  | Course Name      | Feedback Forms | Avg Score  |    | |
+|  ------------------------------------------------------  |
+|  | CSC 101          |      4         |   4.2      |View| |
+|  | MAT 201          |      2         |   4.0      |View| |
+|  ------------------------------------------------------  |
++----------------------------------------------------------+
+|  Performance Trend (Line Chart)                          |
+|  ------------------------------------------------------  |
+|     ●  Semester 1: 4.0                                   |
+|     ●  Semester 2: 4.3                                   |
+|     ●  Semester 3: 4.2                                   |
+|     [Simple line graph]                                  |
++----------------------------------------------------------+
+
+Create Feedback Form page
++------------------------------------------------------+
+|   Create Feedback Form                                |
++------------------------------------------------------+
+|   Select Course: [  CSC 101  ▼ ]                      |
+|                                                      |
+|   Select Metrics (fixed for MVP):                    |
+|     ✔ Clarity                                        |
+|     ✔ Engagement                                     |
+|     ✔ Preparedness                                   |
+|     ✔ Explanation                                    |
+|                                                      |
+|   [Generate Form Link]                               |
++------------------------------------------------------+
+(after clicking)
++------------------------------------------------------+
+|  Feedback Form Created!                               |
++------------------------------------------------------+
+|  Share this link with students:                       |
+|  https://yourapp.com/form/hd82hs72                    |
+|                                                      |
+|  [Copy Link]   [Send via Email]                      |
++------------------------------------------------------+
+
+Student Feedback Form
++------------------------------------------------------+
+|   Lecturer Feedback Form                              |
++------------------------------------------------------+
+|   Course: CSC 101                                     |
+|   Lecturer: Dr. Kamau                                 |
++------------------------------------------------------+
+|   Rate the lecturer on a scale of 1–5:                |
+|                                                      |
+|   Clarity:        (1) (2) (3) (4) (5)                 |
+|   Engagement:     (1) (2) (3) (4) (5)                 |
+|   Preparedness:   (1) (2) (3) (4) (5)                 |
+|   Explanation:    (1) (2) (3) (4) (5)                 |
+|                                                      |
+|   [ Submit Feedback ]                                 |
++------------------------------------------------------+
+
+
+success message:
+
++------------------------------------------------------+
+|  Thank you! Your feedback has been submitted          |
+|  anonymously.                                         |
++------------------------------------------------------+
+
+Lecturer: View Results for a Feedback Form
++------------------------------------------------------+
+|   Feedback Results for CSC 101                        |
++------------------------------------------------------+
+|   Total Responses: 68                                 |
+|   Overall Average: 4.2                                |
++------------------------------------------------------+
+|   Scores Breakdown (Average per Metric):              |
+|   --------------------------------------------------  |
+|   Clarity:         ██████████░░   4.3                 |
+|   Engagement:      █████████░░░   4.0                 |
+|   Preparedness:    ██████████░░   4.2                 |
+|   Explanation:     ██████████░░   4.1                 |
+|   --------------------------------------------------  |
++------------------------------------------------------+
+|   [Download PDF]   [Download Excel]                   |
++------------------------------------------------------+
+
+Admin Dashboard:
+
++------------------------------------------------------+
+| Admin Dashboard                                       |
++------------------------------------------------------+
+|  Navigation:                                          |
+|   - Manage Lecturers                                  |
+|   - Manage Courses                                    |
+|   - Manage Departments                                |
+|   - View All Feedback                                 |
+|   - Export Reports                                    |
++------------------------------------------------------+
+|  System Overview                                      |
+|  ---------------------------------------------------  |
+|  Total Lecturers:  42                                 |
+|  Total Courses:    123                                |
+|  Total Responses:  4,532                              |
+|  Top Rated Dept:   Computer Science                   |
+|  ---------------------------------------------------  |
++------------------------------------------------------+
+|  Analytics Chart (Bar Graph):                         |
+|   Avg Score per Department                            |
+|   --------------------------------------------------  |
+|   CS Dept         ████████████ 4.3                    |
+|   Business Dept   ████████░░░  3.8                    |
+|   Law Dept        █████████░░  4.1                    |
++------------------------------------------------------+
+
+Manage Lecturers(Admin)
++------------------------------------------------------+
+|  Manage Lecturers                                     |
++------------------------------------------------------+
+|  [Add Lecturer]                                       |
++------------------------------------------------------+
+|  Name            | Email                | Dept  | Edit |
+|  ------------------------------------------------------|
+|  Dr. Kamau       | kamau@uni.ac.ke      | CS    |Edit  |
+|  Ms. Achieng     | achieng@uni.ac.ke    | CS    |Edit  |
++------------------------------------------------------+
+
+Manage courses (Admin)
++------------------------------------------------------+
+|  Manage Courses                                       |
++------------------------------------------------------+
+|  [Add Course]                                         |
++------------------------------------------------------+
+|  Code  | Name               | Dept   | Lecturer | Edit |
+|  ------------------------------------------------------|
+|  CSC101| Intro to CS        | CS     | Kamau    |Edit  |
+|  MAT201| Calculus II        | Math   | Otiende  |Edit  |
++------------------------------------------------------+
+
+ 8. Admin – View All Feedback
++------------------------------------------------------+
+|  All Feedback Responses                               |
++------------------------------------------------------+
+|   [Export Excel]   [Export PDF]                       |
++------------------------------------------------------+
+| Course   | Lecturer | Avg Score | Responses | View     |
+|--------------------------------------------------------|
+| CSC101   | Kamau    |   4.2     |    68     | View     |
+| MAT201   | Otiende  |   3.9     |    52     | View     |
++--------------------------------------------------------+
+
+ 9. Login Page (Both Lecturer & Admin)
++--------------------------------------+
+|   Login to Feedback System           |
++--------------------------------------+
+|   Email:  [___________________]      |
+|   Password:[__________________]      |
+|                                      |
+|   Role:  ( ) Lecturer   ( ) Admin    |
+|                                      |
+|   [ Login ]                          |
++--------------------------------------+
+
+10. Responsive Mobile Layout (Simplified)
+
+(Just to show how it stacks)
+
++-----------------------------+
+| Lecturer Dashboard          |
++-----------------------------+
+| [Create Form]               |
+|                             |
+| My Courses                  |
+|  CSC101   Avg: 4.2  [View] |
+|  MAT201   Avg: 4.0  [View] |
++-----------------------------+
+| Trend Chart (scroll)        |
++-----------------------------+
